@@ -19,16 +19,23 @@ app.get("/signup",(req,res)=>{
     res.render("signup")
 })
 
-app.post("/signup",async (req,res)=>{
-    const data={
-        name:req.body.name,
-        password:req.body.password
+app.post("/signup", async (req, res) => {
+    const data = {
+        name: req.body.name,
+        password: req.body.password,
+        email: req.body.email
+    }
+
+    // Check if password meets the requirements
+    const passwordRegex = /^(?=.*[A-Z]).{8,16}$/;
+    if (!passwordRegex.test(data.password)) {
+        res.send("Password must have at least 1 uppercase letter and be between 8 to 16 characters in length");
+        return;
     }
 
     await collection.insertMany([data])
 
     res.render("home")
-
 })
 
 app.post("/login",async (req,res)=>{
