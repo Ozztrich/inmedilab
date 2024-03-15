@@ -23,7 +23,12 @@ app.post("/signup", async (req, res) => {
     const data = {
         name: req.body.name,
         password: req.body.password,
-        email: req.body.email
+        confirmPassword: req.body.confirmPassword, 
+        email: req.body.email,
+        lastName: req.body.lastName,
+        age: req.body.age,
+        phone: req.body.phone,
+        companyName: req.body.companyName
     }
 
     // Check if password meets the requirements
@@ -32,6 +37,15 @@ app.post("/signup", async (req, res) => {
         res.send("Password must have at least 1 uppercase letter and be between 8 to 16 characters in length");
         return;
     }
+
+    // Check if the two passwords match
+    if (data.password !== data.confirmPassword) {
+        res.send("Passwords do not match");
+        return;
+    }
+
+    // Remove the confirmPassword field before saving to database
+    delete data.confirmPassword;
 
     await collection.insertMany([data])
 
