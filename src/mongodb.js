@@ -1,13 +1,15 @@
-const mongoose=require("mongoose")
+const mongoose = require("mongoose")
 
+// Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/Inmedilab")
-.then(()=>{
-    console.log("mongodb connected");
-})
-.catch(()=>{
-    console.log("failed to connect");
-})
+    .then(() => {
+        console.log("mongodb connected");
+    })
+    .catch(() => {
+        console.log("failed to connect");
+    })
 
+// Define the schema for the "Users" collection
 const LogInSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -39,6 +41,8 @@ const LogInSchema = new mongoose.Schema({
     }
 })
 
-const collection= new mongoose.model("Users",LogInSchema)
+// Create a model based on the schema
+const collection = new mongoose.model("Users", LogInSchema)
 
-module.exports=collection
+// Export the model to be used in other files
+module.exports = collection
