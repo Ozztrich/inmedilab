@@ -38,6 +38,12 @@ const LogInSchema = new mongoose.Schema({
     phone: {
         type: Number,
         required: true
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     }
 })
 
