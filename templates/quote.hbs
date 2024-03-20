@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Quote</title>
+</head>
+<body>
+    <form action="/quote" method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <label for="requiredStudies">Required Studies:</label>
+        <input type="text" id="requiredStudies" name="requiredStudies" value="{{requiredStudies}}">
+        <br>
+        <label for="companySocialReason">Company Social Reason:</label>
+        <input type="text" id="companySocialReason" name="companySocialReason" value="{{companySocialReason}}">
+        <br>
+        <label for="companyPlant">Company Plant:</label>
+        <input type="text" id="companyPlant" name="companyPlant" value="{{companyPlant}}">
+        <br>
+        <label for="companyPhoneNumber">Company Phone Number:</label>
+        <input type="text" id="companyPhoneNumber" name="companyPhoneNumber" value="{{companyPhoneNumber}}">
+        <br>
+        <label for="companyMainActivity">Company Main Activity:</label>
+        <input type="text" id="companyMainActivity" name="companyMainActivity" value="{{companyMainActivity}}">
+        <br>
+        <label for="companyEmployerRegistry">Company Employer Registry:</label>
+        <input type="text" id="companyEmployerRegistry" name="companyEmployerRegistry" value="{{companyEmployerRegistry}}">
+        <br>
+        <label for="companyRFC">Company RFC:</label>
+        <input type="text" id="companyRFC" name="companyRFC" value="{{companyRFC}}">
+        <br>
+        <label for="companyLegalRepresentative">Company Legal Representative:</label>
+        <input type="text" id="companyLegalRepresentative" name="companyLegalRepresentative" value="{{companyLegalRepresentative}}">
+        <br>
+        <label for="companyAdministrativeTurn">Company Administrative Turn:</label>
+        <input type="text" id="companyAdministrativeTurn" name="companyAdministrativeTurn" value="{{companyAdministrativeTurn}}">
+        <br>
+        <label for="companyFirstTurn">Company First Turn:</label>
+        <input type="text" id="companyFirstTurn" name="companyFirstTurn" value="{{companyFirstTurn}}">
+        <br>
+        <label for="companySecondTurn">Company Second Turn:</label>
+        <input type="text" id="companySecondTurn" name="companySecondTurn" value="{{companySecondTurn}}">
+        <br>
+        <label for="companyThirdTurn">Company Third Turn:</label>
+        <input type="text" id="companyThirdTurn" name="companyThirdTurn" value="{{companyThirdTurn}}">
+        <br>
+        <label for="streetNameAndNumber">Street Name and Number:</label>
+        <input type="text" id="streetNameAndNumber" name="streetNameAndNumber" value="{{companyPhysicalLocation.streetNameAndNumber}}">
+        <br>
+        <label for="colony">Colony:</label>
+        <input type="text" id="colony" name="colony" value="{{companyPhysicalLocation.colony}}">
+        <br>
+        <label for="municipality">Municipality:</label>
+        <input type="text" id="municipality" name="municipality" value="{{companyPhysicalLocation.municipality}}">
+        <br>
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" value="{{companyPhysicalLocation.state}}">
+        <br>
+        <label for="postalCode">Postal Code:</label>
+        <input type="text" id="postalCode" name="postalCode" value="{{companyPhysicalLocation.postalCode}}">
+        <br>
+        <label for="recipientName">Recipient Name:</label>
+        <input type="text" id="recipientName" name="recipientName" value="{{recipient.name}}">
+        <br>
+        <label for="positionInCompany">Position in Company:</label>
+        <input type="text" id="positionInCompany" name="positionInCompany" value="{{recipient.positionInCompany}}">
+        <br>
+        <label for="grade">Grade:</label>
+        <input type="text" id="grade" name="grade" value="{{recipient.grade}}">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{recipient.email}}">
+        <br>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="{{recipient.phoneNumber}}">
+        <br>
+        <label for="additionalComments">Additional Comments:</label>
+        <textarea id="additionalComments" name="additionalComments">{{recipient.additionalComments}}</textarea>
+        <br>
+        <label for="billingSocialReason">Billing Social Reason:</label>
+        <input type="text" id="billingSocialReason" name="billingSocialReason" value="{{billingInformation.socialReason}}">
+        <br>
+        <label for="billingStreetNameAndNumber">Billing Street Name and Number:</label>
+        <input type="text" id="billingStreetNameAndNumber" name="billingStreetNameAndNumber" value="{{billingInformation.streetNameAndNumber}}">
+        <br>
+        <label for="billingColony">Billing Colony:</label>
+        <input type="text" id="billingColony" name="billingColony" value="{{billingInformation.colony}}">
+        <br>
+        <label for="billingMunicipality">Billing Municipality:</label>
+        <input type="text" id="billingMunicipality" name="billingMunicipality" value="{{billingInformation.municipality}}">
+        <br>
+        <label for="billingState">Billing State:</label>
+        <input type="text" id="billingState" name="billingState" value="{{billingInformation.state}}">
+        <br>
+        <label for="billingPostalCode">Billing Postal Code:</label>
+        <input type="text" id="billingPostalCode" name="billingPostalCode" value="{{billingInformation.postalCode}}">
+        <br>
+        <button type="submit">Create Quote</button>
+    </form>
+</body>
+</html>

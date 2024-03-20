@@ -22,5 +22,13 @@
     <!-- Link to signup page -->
     <a href="/signup"> Signup your account </a>
 
+    {{!-- Store the logged-in user in a session --}}
+    {{#if session.user}}
+        <script>
+            var loggedInUser = "{{session.user}}";
+            var userId = "{{session.user.id}}"; // Add this line to get the userId
+        </script>
+    {{/if}}
+
 </body>
 </html>

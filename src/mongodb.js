@@ -10,7 +10,7 @@ mongoose.connect("mongodb://localhost:27017/Inmedilab")
     })
 
 // Define the schema for the "Users" collection
-const LogInSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     userName: {
         type: String,
         required: true
@@ -51,8 +51,144 @@ const LogInSchema = new mongoose.Schema({
     }
 })
 
-// Create a model based on the schema
-const collection = new mongoose.model("Users", LogInSchema)
+// Define schema for the "Quote" collection
+const QuoteSchema = new mongoose.Schema({
+    author:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Users'
+    },
+    requiredStudies: {
+        type: String,
+        required: true
+    },
+    registryDate: {
+        type: Date,
+        required: true
+    },
+    companySocialReason: {
+        type: String,
+        required: true
+    },
+    companyPlant: {
+        type: String,
+        required: true
+    },
+    companyPhoneNumber: {
+        type: String,
+        required: true
+    },
+    companyMainActivity: {
+        type: String,
+        required: true
+    },
+    companyEmployerRegistry: {
+        type: String,
+        required: true
+    },
+    companyRFC: {
+        type: String,
+        required: true
+    },
+    companyLegalRepresentative: {
+        type: String,
+        required: true
+    },
+    companyAdministrativeTurn: {
+        type: String,
+        required: true
+    },
+    companyFirstTurn: {
+        type: String,
+        required: true
+    },
+    companySecondTurn: {
+        type: String,
+        required: true
+    },
+    companyThirdTurn: {
+        type: String,
+        required: true
+    },
+    companyPhysicalLocation: {
+        streetNameAndNumber: {
+            type: String,
+            required: true
+        },
+        colony: {
+            type: String,
+            required: true
+        },
+        municipality: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        postalCode: {
+            type: String,
+            required: true
+        }
+    },
+    recipient: {
+        name: {
+            type: String,
+            required: true
+        },
+        positionInCompany: {
+            type: String,
+            required: true
+        },
+        grade: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        phoneNumber: {
+            type: String,
+            required: true
+        },
+        additionalComments: {
+            type: String
+        }
+    },
+    billingInformation: {
+        socialReason: {
+            type: String,
+            required: true
+        },
+        streetNameAndNumber: {
+            type: String,
+            required: true
+        },
+        colony: {
+            type: String,
+            required: true
+        },
+        municipality: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        postalCode: {
+            type: String,
+            required: true
+        }
+    }
+})
 
-// Export the model to be used in other files
-module.exports = collection
+// Create a model based on the user schema
+const User = mongoose.model("Users", UserSchema);
+
+// Create a model based on the quote schema
+const Quote= mongoose.model("Quote", QuoteSchema);
+
+// Export the models to be used in other files
+module.exports = { User, Quote };
