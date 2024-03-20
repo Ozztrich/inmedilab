@@ -5,8 +5,9 @@ const collection=require("./mongodb") // Importing the mongodb module
 const crypto = require('crypto');// Importing the crypto module
 const nodemailer = require('nodemailer');// Importing the nodemailer module
 const { google } = require('googleapis');// Importing the googleapis module
+const bcrypt = require('bcrypt');
 const OAuth2 = google.auth.OAuth2;// Importing the OAuth2 module
-require('dotenv').config();// Importing the fs module
+
 
 require('dotenv').config(); // Importing the dotenv module to read .env file
 
@@ -32,7 +33,10 @@ const smtpTransport = nodemailer.createTransport({
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
         accessToken: accessToken
-    }
+    },
+    tls: {
+        rejectUnauthorized: false
+      }
 });
 
 const app = express() // Creating an instance of the express application
@@ -88,25 +92,43 @@ app.post("/signup", async (req, res) => { // Handling POST request for the /sign
     // Remove the confirmPassword field before saving to database
     delete data.confirmPassword;
 
-    await collection.insertMany([data]) // Inserting data into the database
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(data.password, 10); // Using a salt factor of 10
 
-    res.render("home") // Rendering the home template
+        // Replace the plain password with the hashed one
+        data.password = hashedPassword;
+
+        await collection.insertMany([data]) // Inserting data into the database
+        res.render("home");
+    } catch (error) {
+        console.error("Error during signup:", error);
+        res.status(500).send("An error occurred during signup.");
+    }
 })
 
 app.post("/login",async (req,res)=>{ // Handling POST request for the /login route
-   
-    try{
-        const check= await collection.findOne({name:req.body.name}) // Finding a document in the database
-        if(check.password===req.body.password){ // Checking if the password matches
-            res.render("home") // Rendering the home template
-        }else{
-            res.send("wrong password") // Sending an error message
-        }
-    }
-    catch{
+    const name = req.body.name;
+    const password = req.body.password;
 
-        res.send("wrong details") // Sending an error message
-        
+   try {
+        // Find the user in the database
+        const check = await collection.findOne({ name });
+        if (!check) {
+            res.send("User not found");
+            return;
+        }
+
+        // Compare the hashed password with the provided password
+        const isPasswordMatch = await bcrypt.compare(password, check.password);
+        if (isPasswordMatch) {
+            res.render("home");
+        } else {
+            res.send("Incorrect password");
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.status(500).send("An error occurred during login.");
     }
 
 })
@@ -155,6 +177,20 @@ app.post('/reset-password', async (req, res) => {
     user.password = newPassword; // Store new password
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
+
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(user.password, 10); // Using a salt factor of 10
+
+        // Replace the plain password with the hashed one
+        user.password = hashedPassword;
+
+    } catch (error) {
+        console.error("Error during password reset:", error);
+        res.status(500).send("An error occurred during password reset.");
+    }
+
+
     await collection.updateOne({ _id: user._id }, { $set: { password: user.password, resetPasswordToken: user.resetPasswordToken, resetPasswordExpires: user.resetPasswordExpires } });
 
     res.send('Password has been updated');
