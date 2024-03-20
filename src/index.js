@@ -66,6 +66,7 @@ app.get("/reset-password",(req,res)=>{ // Handling GET request for the /reset-pa
 
 app.post("/signup", async (req, res) => { // Handling POST request for the /signup route
     const data = { // Extracting data from the request body
+        userName: req.body.userName,
         name: req.body.name,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword, 
@@ -108,12 +109,12 @@ app.post("/signup", async (req, res) => { // Handling POST request for the /sign
 })
 
 app.post("/login",async (req,res)=>{ // Handling POST request for the /login route
-    const name = req.body.name;
+    const userName = req.body.userName;
     const password = req.body.password;
 
    try {
         // Find the user in the database
-        const check = await collection.findOne({ name });
+        const check = await collection.findOne({ userName });
         if (!check) {
             res.send("User not found");
             return;

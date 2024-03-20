@@ -11,6 +11,10 @@ mongoose.connect("mongodb://localhost:27017/Inmedilab")
 
 // Define the schema for the "Users" collection
 const LogInSchema = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
