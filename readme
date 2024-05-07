@@ -1,0 +1,56 @@
+# Inmedilab Readme
+
+# Project Description
+
+This project is a web application designed to enhance the online presence of INMEDILAB. It's built using Express, a popular framework for building web applications in Node.js.
+
+The application provides a user registration and login feature. This is done using sessions, which allow us to keep track of users as they navigate through the site. When a user logs in, a unique session is created for them, and this session is used to identify them on subsequent visits.
+
+Users can submit quotations for INMEDILAB's services. These quotations are stored in a database, allowing INMEDILAB to efficiently manage and respond to these requests.
+
+The application also includes a feature for sending emails. This is done using Nodemailer, a module for sending emails from Node.js applications. We use Google's OAuth2 client to authenticate with the Gmail API, allowing us to send emails from a Gmail account.
+
+The application uses Handlebars for its views. Handlebars is a templating engine that allows us to generate HTML dynamically, making it easier to display data from our database in our views.
+
+The application is configured using environment variables, which are stored in a `.env` file. This allows us to keep sensitive information, like our database connection string and session secret, out of our code.
+
+Overall, this project aims to provide a user-friendly system for INMEDILAB's customers, making it easier for them to request quotations and for INMEDILAB to manage these requests.
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`SESSION_SECRET` - Secret key for the session
+
+`CLIENT_ID` - Your Google OAuth2 client ID
+
+`CLIENT_SECRET` - Your Google OAuth2 client secret
+
+`REFRESH_TOKEN` - Refresh token for Google OAuth2
+
+## Dependencies
+
+- `dotenv`: This project uses the dotenv module to load environment variables from a .env file.
+
+## Running the project
+
+1. Install dependencies with `npm install`
+2. Run the project with `npm start`
+
+## Session Configuration
+
+This project uses express-session for session management. The session is configured with the following options:
+
+- `secret`: Secret key for the session, loaded from the `SESSION_SECRET` environment variable.
+- `resave`: Do not force session to be saved back to the session store.
+- `saveUninitialized`: Do not save uninitialized sessions to the store.
+- `cookie`: Session cookie settings. Currently set to expire after 24 hours.
+
+## Google OAuth2 Configuration
+
+This project uses Google's OAuth2 client for authentication. The client is configured with the following options:
+
+- `CLIENT_ID`: Your Google OAuth2 client ID, loaded from the `CLIENT_ID` environment variable.
+- `CLIENT_SECRET`: Your Google OAuth2 client secret, loaded from the `CLIENT_SECRET` environment variable.
+- `redirect_uris`: The redirect URIs for your Google OAuth2 client. Currently set to 'https://developers.google.com/oauthplayground'.
+- `refresh_token`: The refresh token for your Google OAuth2 client, loaded from the `REFRESH_TOKEN` environment variable.

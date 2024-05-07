@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: {
+    phone: { //celphone 
         type: Number,
         required: true
     },
@@ -52,7 +52,7 @@ const UserSchema = new mongoose.Schema({
 })
 
 // Define schema for the "Quote" collection
-const QuoteSchema = new mongoose.Schema({
+const QuoteSchema = new mongoose.Schema({// agregar, estudios previos con cantidad de puntos.
     author:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Users'
