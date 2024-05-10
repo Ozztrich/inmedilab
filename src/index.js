@@ -26,27 +26,41 @@ const oauth2Client = new google.auth.OAuth2(
     'https://developers.google.com/oauthplayground'  // Redirect URL
 );
 
+let smtpTransport;
+
 oauth2Client.setCredentials({
     refresh_token: process.env.REFRESH_TOKEN
 });
 
-const accessToken = oauth2Client.getAccessToken();
+const accessToken = oauth2Client.refreshAccessToken().then(res => res.credentials.access_token);
 
-const smtpTransport = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        type: 'OAuth2',
-        user: 'javier.durancedillo@gmail.com',//Email from which the mail will be sent
-        //these values come from the .env file in the root directory, modify them to your own values
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-        accessToken: accessToken
-    },
-    tls: {
-        rejectUnauthorized: false
-      }
-});
+async function refreshAccessTokenAndSetupSmtpTransport() {
+    try {
+      const res = await oauth2Client.refreshAccessToken();
+      const accessToken = res.credentials.access_token;
+  
+      const transportConfig = {
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: 'javier.durancedillo@gmail.com',
+          clientId: process.env.CLIENT_ID,
+          clientSecret: process.env.CLIENT_SECRET,
+          refreshToken: process.env.REFRESH_TOKEN,
+          accessToken: accessToken
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      };
+  
+      console.log('Transport Configuration:', transportConfig);
+  
+      smtpTransport = nodemailer.createTransport(transportConfig);
+    } catch (err) {
+      console.error('Error refreshing access token', err);
+    }
+}
 
 
 
@@ -237,22 +251,31 @@ app.post('/forgot-password', async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await userCollection.updateOne({ email }, { $set: { resetPasswordToken: token, resetPasswordExpires: user.resetPasswordExpires } });
 
-    const mailOptions = {
-        from: 'javier.durancedillo@gmail.com', // sender address
-        to: email, // receiver is the user's email
-        subject: 'Password Reset', // Subject line
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-              'http://localhost:3000/reset/' + token + '\n\n' +
-              'If you did not request this, please ignore this email and your password will remain unchanged.\n' // plain text body
-    };
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-        if (error) {
-            console.error(error);  // Add this line
-            return res.status(500).send('Error sending email');
-        }
-        res.send('Password reset email sent');
-    });
+    if (!smtpTransport) {
+        return refreshAccessTokenAndSetupSmtpTransport()
+          .then(() => {
+            const mailOptions = {
+                from: 'javier.durancedillo@gmail.com', // sender address
+                to: email, // receiver is the user's email
+                subject: 'Password Reset', // Subject line
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                      'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                      'http://localhost:3000/reset/' + token + '\n\n' +
+                      'If you did not request this, please ignore this email and your password will remain unchanged.\n' // plain text body
+            };
+            smtpTransport.sendMail(mailOptions, (error, response) => {
+                if (error) {
+                    console.error(error);  // Add this line
+                    return res.status(500).send('Error sending email');
+                }
+                res.send('Password reset email sent');
+            });
+          })
+          .catch(err => {
+            res.status(500).send('Error setting up email transport');
+          });
+    }
+    
 });
 
 app.post('/reset-password', async (req, res) => {
