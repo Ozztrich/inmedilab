@@ -43,7 +43,7 @@ async function refreshAccessTokenAndSetupSmtpTransport() {
         service: 'gmail',
         auth: {
           type: 'OAuth2',
-          user: 'javier.durancedillo@gmail.com',
+          user: '',// Your email id emailexample@gmail.com
           clientId: process.env.CLIENT_ID,
           clientSecret: process.env.CLIENT_SECRET,
           refreshToken: process.env.REFRESH_TOKEN,
@@ -255,7 +255,7 @@ app.post('/forgot-password', async (req, res) => {
         return refreshAccessTokenAndSetupSmtpTransport()
           .then(() => {
             const mailOptions = {
-                from: 'javier.durancedillo@gmail.com', // sender address
+                from: '', // sender address (your email address)
                 to: email, // receiver is the user's email
                 subject: 'Password Reset', // Subject line
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
